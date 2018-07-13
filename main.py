@@ -29,17 +29,18 @@ saver.restore(sess,"mnist/data/convalutional.ckpt")
 def regression(input):
     return sess.run(y1,feed_dict={x:input}).flatten().tolist()
 
-def convalutional(input):
+def convolutional(input):
     return sess.run(y1,feed_dict={x:input,keep_prob:1.0}).flatten().tolist()
 
 app=Flask(__name__)
 
-@app.route('/api/mnist',methods=['post'])
+@app.route('/api/mnist', methods=['POST'])
 def mnist():
-    input((255-np.array(request.json,dtype=np.uint8))/255.0).reshape(1,784)
-    output1=regression(input)
-    output2=convalutional(input)
-    return jsonify(results=[output1,output2])
+    input = ((255 - np.array(request.json, dtype=np.uint8)) / 255.0).reshape(1, 784)
+    output1 = regression(input)
+    output2 = convolutional(input)
+    return jsonify(results=[output1, output2])
+
 
 @app.route('/')
 def main():
